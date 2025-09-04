@@ -2,20 +2,62 @@ import streamlit as st
 
 st.set_page_config(page_title="FaeThink", page_icon="🤖", layout="wide")
 
-# Fundo branco completo
+# Fundo branco completo e estilos do chat
 st.markdown(
     """
     <style>
     body {background-color: #ffffff;}
     .css-18e3th9 {background-color: #ffffff;}
+    
+    /* Estilo dos balões */
+    .balao-usuario {
+        background-color: #4A90E2; 
+        color: #000000; 
+        font-weight: bold; 
+        padding: 10px; 
+        border-radius: 15px; 
+        margin: 5px 0; 
+        display: inline-block; 
+        max-width: 70%; 
+        float: right; 
+        clear: both;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    }
+    .balao-bot {
+        background-color: #ADD8E6; 
+        color: #000000; 
+        font-weight: bold; 
+        padding: 10px; 
+        border-radius: 15px; 
+        margin: 5px 0; 
+        display: inline-block; 
+        max-width: 70%; 
+        float: left; 
+        clear: both;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    }
+
+    /* Título com gradiente */
+    .titulo-gradient {
+        text-align: center;
+        background: linear-gradient(90deg, #4A90E2, #ADD8E6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 48px;
+        font-weight: bold;
+        padding: 15px;
+        border-radius: 10px;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Título
-st.markdown("<h1 style='text-align:center;color:#000;'>FaeThink 🤖</h1>", unsafe_allow_html=True)
-st.write("Faça perguntas sobre escola, estágios, boletim, horários etc.")
+# Título topo com gradiente e emoji
+st.markdown("<h1 class='titulo-gradient'>FaeThink 🎓</h1>", unsafe_allow_html=True)
+
+# Descrição personalizada
+st.write("Sou especializado em Faetec. Manda ver!")
 
 # Base de conhecimento com palavras-chave
 base_conhecimento = [
@@ -62,37 +104,9 @@ if st.button("Enviar") or pergunta_usuario:
         st.session_state.conversa.append(("FaeThink", resposta_bot))
         st.session_state.pergunta = ""
 
-# Exibir histórico com balões ajustáveis
+# Exibir histórico com balões com sombras
 for usuario, mensagem in st.session_state.conversa:
     if usuario == "Você":
-        st.markdown(f"""
-            <div style="
-                background-color:#4A90E2; 
-                color:#000000; 
-                font-weight:bold; 
-                padding:10px; 
-                border-radius:10px; 
-                margin:5px 0; 
-                display:inline-block; 
-                max-width:70%; 
-                float:right; 
-                clear:both;">
-                <b>Você:</b> {mensagem}
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"<div class='balao-usuario'><b>Você:</b> {mensagem}</div>", unsafe_allow_html=True)
     else:
-        st.markdown(f"""
-            <div style="
-                background-color:#ADD8E6; 
-                color:#000000; 
-                font-weight:bold; 
-                padding:10px; 
-                border-radius:10px; 
-                margin:5px 0; 
-                display:inline-block; 
-                max-width:70%; 
-                float:left; 
-                clear:both;">
-                <b>FaeThink:</b> {mensagem}
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"<div class='balao-bot'><b>FaeThink:</b> {mensagem}</div>", unsafe_allow_html=True)
