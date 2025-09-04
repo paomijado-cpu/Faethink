@@ -78,7 +78,16 @@ if st.button("Enviar") or pergunta_usuario:
         try:
             response = requests.post(url, headers=headers, json=data)
             resposta_json = response.json()
-            resposta_bot = resposta_json.get("text", "Não consegui gerar uma resposta 😅")
+            st.write("DEBUG JSON da resposta:", resposta_json)  # DEBUG: veja a estrutura retornada
+
+            # Tenta pegar o campo correto da resposta
+            if "text" in resposta_json:
+                resposta_bot = resposta_json["text"]
+            elif "output" in resposta_json and len(resposta_json["output"]) > 0:
+                resposta_bot = resposta_json["output"][0].get("content", "Não consegui gerar uma resposta 😅")
+            else:
+                resposta_bot = "Não consegui gerar uma resposta 😅"
+
         except Exception as e:
             resposta_bot = f"Ocorreu um erro: {e}"
 
