@@ -1,102 +1,51 @@
 import streamlit as st
-import requests
 
-# Configuração da página
 st.set_page_config(page_title="FaeThink", page_icon="🤖", layout="wide")
 
-# Fundo branco completo
+# Fundo branco
 st.markdown(
     """
     <style>
-    body {
-        background-color: #ffffff;
-    }
-    .css-18e3th9 {  /* main content area */
-        background-color: #ffffff;
-    }
+    body {background-color: #ffffff;}
+    .css-18e3th9 {background-color: #ffffff;}
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Título
-st.markdown("<h1 style='text-align: center; color: #000;'>FaeThink 🤖</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;color:#000;'>FaeThink 🤖</h1>", unsafe_allow_html=True)
 st.write("Faça perguntas sobre escola, estágios, boletim, horários etc.")
 
-# Base de conhecimento
-base_conhecimento = {
-    "onde posso arrumar estágio?": "Você pode procurar estágio no setor de carreiras da escola ou no portal de estágio da prefeitura.",
-    "como acessar meu boletim?": "O boletim pode ser acessado pelo portal do aluno, usando seu login e senha.",
-    "qual o horário das aulas?": "O horário completo das aulas está disponível no quadro de horários ou no portal do aluno.",
-    "como falar com a secretaria?": "Você pode ir pessoalmente à secretaria ou enviar um e-mail para secretaria@escola.com."
-}
+# Base de conhecimento usando palavras-chave
+base_conhecimento = [
+    {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola ou no portal de estágio."},
+    {"keywords": ["boletim", "notas"], "resposta": "O boletim pode ser acessado pelo portal do aluno usando seu login e senha."},
+    {"keywords": ["horário", "aulas"], "resposta": "O horário completo das aulas está disponível no portal do aluno ou no quadro de horários."},
+    {"keywords": ["secretaria", "contato"], "resposta": "Você pode falar com a secretaria pessoalmente ou enviar um e-mail para secretaria@escola.com."}
+]
 
-# Inicializa histórico da conversa
+# Inicializa histórico
 if "conversa" not in st.session_state:
     st.session_state.conversa = []
 
-# Perguntas rápidas
-perguntas_rapidas = [
-    "Onde posso arrumar estágio?",
-    "Como acessar meu boletim?",
-    "Qual o horário das aulas?",
-    "Como falar com a secretaria?"
-]
+# Input do usuário
+pergunta_usuario = st.text_input("Digite sua pergunta:")
 
-# Botões de perguntas rápidas
-cols = st.columns(len(perguntas_rapidas))
-for i, pergunta in enumerate(perguntas_rapidas):
-    if cols[i].button(pergunta):
-        st.session_state.pergunta = pergunta
+if st.button("Enviar") and pergunta_usuario:
+    resposta_bot = "Desculpe, não entendi sua pergunta 😅"
+    pergunta_lower = pergunta_usuario.lower()
+    
+    # Verifica palavras-chave
+    for item in base_conhecimento:
+        if any(k in pergunta_lower for k in item["keywords"]):
+            resposta_bot = item["resposta"]
+            break
+    
+    # Atualiza histórico
+    st.session_state.conversa.append(("Você", pergunta_usuario))
+    st.session_state.conversa.append(("FaeThink", resposta_bot))
 
-# Campo de input
-pergunta_usuario = st.text_input("Digite sua pergunta aqui:", value=st.session_state.get("pergunta", ""))
-
-# Enviar pergunta
-if st.button("Enviar") or pergunta_usuario:
-    if pergunta_usuario:
-        # Checa base de conhecimento
-        pergunta_lower = pergunta_usuario.lower()
-        resposta_base = base_conhecimento.get(pergunta_lower, None)
-
-        if resposta_base:
-            prompt_para_ai = f"Reescreva de forma clara e amigável esta resposta escolar: {resposta_base}"
-        else:
-            prompt_para_ai = pergunta_usuario  # deixa IA responder normalmente
-
-        url = "https://api.gemini.com/v1/ai"  # ajuste conforme sua API
-        headers = {
-            "Authorization": "Bearer AIzaSyC_cZE-j8YyKNe07YbzJXFzNr7MJx3nyr8",
-            "Content-Type": "application/json"
-        }
-        data = {
-            "prompt": prompt_para_ai,
-            "model": "gemini-default",
-            "max_tokens": 150
-        }
-
-        try:
-            response = requests.post(url, headers=headers, json=data)
-            resposta_json = response.json()
-            st.write("DEBUG JSON da resposta:", resposta_json)  # DEBUG: veja a estrutura retornada
-
-            # Tenta pegar o campo correto da resposta
-            if "text" in resposta_json:
-                resposta_bot = resposta_json["text"]
-            elif "output" in resposta_json and len(resposta_json["output"]) > 0:
-                resposta_bot = resposta_json["output"][0].get("content", "Não consegui gerar uma resposta 😅")
-            else:
-                resposta_bot = "Não consegui gerar uma resposta 😅"
-
-        except Exception as e:
-            resposta_bot = f"Ocorreu um erro: {e}"
-
-        # Atualiza histórico
-        st.session_state.conversa.append(("Você", pergunta_usuario))
-        st.session_state.conversa.append(("Bot", resposta_bot))
-        st.session_state.pergunta = ""
-
-# Exibir histórico com balões ajustáveis
+# Exibe histórico
 for usuario, mensagem in st.session_state.conversa:
     if usuario == "Você":
         st.markdown(f"""
