@@ -6,9 +6,15 @@ st.set_page_config(page_title="FaeThink", page_icon="🤖", layout="wide")
 st.markdown(
     """
     <style>
-    body {background-color: #ffffff;}
-    .css-18e3th9 {background-color: #ffffff;}
-    
+    /* Fundo branco geral */
+    body {
+        background-color: #ffffff !important;
+    }
+    .block-container {
+        background-color: #ffffff !important;
+        padding: 1rem 2rem;
+    }
+
     /* Estilo dos balões */
     .balao-usuario {
         background-color: #4A90E2; 
@@ -62,9 +68,9 @@ st.write("Sou especializado em Faetec. Manda ver😁!")
 # Base de conhecimento com palavras-chave
 base_conhecimento = [
     {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola, na sala ***."},
-    {"keywords": ["boletim", "notas"], "resposta": "O boletim pode ser pego na secretarias após cada trimestre."},
+    {"keywords": ["boletim", "notas"], "resposta": "O boletim pode ser pego na secretaria após cada trimestre."},
     {"keywords": ["horário", "aulas"], "resposta": "O horário completo das aulas está disponível no mural da escola."},
-    {"keywords": ["secretaria", "contato"], "resposta": "Você pode falar com a secretaria pessoalmente, assim que entrar na escola a esquerda."}
+    {"keywords": ["secretaria", "contato"], "resposta": "Você pode falar com a secretaria pessoalmente, assim que entrar na escola à esquerda."}
 ]
 
 # Inicializa histórico da conversa
@@ -88,7 +94,8 @@ for i, pergunta in enumerate(perguntas_rapidas):
 # Campo de input
 pergunta_usuario = st.text_input("Digite sua pergunta:", value=st.session_state.get("pergunta", ""))
 
-if st.button("Enviar") or pergunta_usuario:
+# Enviar apenas com o botão
+if st.button("Enviar"):
     if pergunta_usuario:
         pergunta_lower = pergunta_usuario.lower()
         resposta_bot = "Desculpe, não entendi sua pergunta 😅"
@@ -102,7 +109,7 @@ if st.button("Enviar") or pergunta_usuario:
         # Atualiza histórico
         st.session_state.conversa.append(("Você", pergunta_usuario))
         st.session_state.conversa.append(("FaeThink", resposta_bot))
-        st.session_state.pergunta = ""
+        st.session_state.pergunta = ""  # limpa input após envio
 
 # Exibir histórico com balões com sombras
 for usuario, mensagem in st.session_state.conversa:
