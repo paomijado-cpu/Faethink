@@ -2,20 +2,22 @@ import streamlit as st
 
 st.set_page_config(page_title="FaeThink", page_icon="🤖", layout="wide")
 
-# Fundo branco completo e estilos do chat
+# Estilos gerais do layout
 st.markdown(
     """
     <style>
-    /* Fundo branco geral */
+    /* Fundo da página e layout em tons de branco */
     body {
-        background-color: #ffffff !important;
+        background-color: #f9f9f9 !important;
     }
     .block-container {
         background-color: #ffffff !important;
-        padding: 1rem 2rem;
+        padding: 2rem 2rem;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.05);
     }
 
-    /* Estilo dos balões */
+    /* Balões do chat */
     .balao-usuario {
         background-color: #4A90E2; 
         color: #000000; 
@@ -54,6 +56,12 @@ st.markdown(
         padding: 15px;
         border-radius: 10px;
     }
+
+    /* Texto normal em preto e negrito */
+    .texto-preto {
+        color: #000000;
+        font-weight: bold;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -62,8 +70,8 @@ st.markdown(
 # Título topo com gradiente e emoji
 st.markdown("<h1 class='titulo-gradient'>FaeThink 🎓</h1>", unsafe_allow_html=True)
 
-# Descrição personalizada
-st.write("Sou especializado em Faetec. Manda ver😁!")
+# Descrição personalizada em preto negrito
+st.markdown("<p class='texto-preto'>Sou especializado em Faetec. Manda ver😁!</p>", unsafe_allow_html=True)
 
 # Base de conhecimento com palavras-chave
 base_conhecimento = [
@@ -94,7 +102,7 @@ for i, pergunta in enumerate(perguntas_rapidas):
 # Campo de input
 pergunta_usuario = st.text_input("Digite sua pergunta:", value=st.session_state.get("pergunta", ""))
 
-# Enviar apenas com o botão
+# Enviar apenas com botão
 if st.button("Enviar"):
     if pergunta_usuario:
         pergunta_lower = pergunta_usuario.lower()
