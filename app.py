@@ -1,9 +1,23 @@
 import streamlit as st
 import requests
 
-st.set_page_config(page_title="Chatbot Escolar", page_icon="🎓", layout="wide")
+# Configuração da página
+st.set_page_config(page_title="Faethink", page_icon="🎓", layout="wide")
 
-st.markdown("<h1 style='text-align: center;'>Chatbot Escolar 🎓</h1>", unsafe_allow_html=True)
+# Fundo branco
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #ffffff;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Título
+st.markdown("<h1 style='text-align: center; color: #000;'>Faethink 🎓</h1>", unsafe_allow_html=True)
 st.write("Faça perguntas sobre escola, estágios, boletim, horários etc.")
 
 # Inicializa o histórico da conversa
@@ -30,7 +44,7 @@ pergunta_usuario = st.text_input("Digite sua pergunta aqui:", value=st.session_s
 # Enviar pergunta
 if st.button("Enviar") or pergunta_usuario:
     if pergunta_usuario:
-        url = "https://api.gemini.com/v1/ai"  # ajuste conforme a documentação da sua API
+        url = "https://api.gemini.com/v1/ai"  # ajuste conforme sua API
         headers = {
             "Authorization": "Bearer AIzaSyC_cZE-j8YyKNe07YbzJXFzNr7MJx3nyr8",
             "Content-Type": "application/json"
@@ -51,17 +65,17 @@ if st.button("Enviar") or pergunta_usuario:
         st.session_state.conversa.append(("Bot", resposta_bot))
         st.session_state.pergunta = ""
 
-# Exibir histórico com balões de chat
+# Exibir histórico com balões azul
 for usuario, mensagem in st.session_state.conversa:
     if usuario == "Você":
         st.markdown(f"""
-            <div style="background-color:#DCF8C6; padding:10px; border-radius:10px; margin:5px 0; width:60%; float:right; clear:both;">
+            <div style="background-color:#4A90E2; color:#000000; font-weight:bold; padding:10px; border-radius:10px; margin:5px 0; width:60%; float:right; clear:both;">
                 <b>Você:</b> {mensagem}
             </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown(f"""
-            <div style="background-color:#FFF; padding:10px; border-radius:10px; margin:5px 0; width:60%; float:left; clear:both; border:1px solid #CCC;">
+            <div style="background-color:#ADD8E6; color:#000000; font-weight:bold; padding:10px; border-radius:10px; margin:5px 0; width:60%; float:left; clear:both;">
                 <b>Bot:</b> {mensagem}
             </div>
         """, unsafe_allow_html=True)
