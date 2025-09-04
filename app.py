@@ -57,14 +57,14 @@ st.markdown(
 st.markdown("<h1 class='titulo-gradient'>FaeThink 🎓</h1>", unsafe_allow_html=True)
 
 # Descrição personalizada
-st.write("Sou especializado em Faetec. Manda ver!")
+st.write("Sou especializado em Faetec. Manda ver😁!")
 
 # Base de conhecimento com palavras-chave
 base_conhecimento = [
-    {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola ou no portal de estágio."},
-    {"keywords": ["boletim", "notas"], "resposta": "O boletim pode ser acessado pelo portal do aluno usando seu login e senha."},
-    {"keywords": ["horário", "aulas"], "resposta": "O horário completo das aulas está disponível no portal do aluno ou no quadro de horários."},
-    {"keywords": ["secretaria", "contato"], "resposta": "Você pode falar com a secretaria pessoalmente ou enviar um e-mail para secretaria@escola.com."}
+    {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola, na sala ***."},
+    {"keywords": ["boletim", "notas"], "resposta": "O boletim pode ser pego na secretarias após cada trimestre."},
+    {"keywords": ["horário", "aulas"], "resposta": "O horário completo das aulas está disponível no mural da escola."},
+    {"keywords": ["secretaria", "contato"], "resposta": "Você pode falar com a secretaria pessoalmente, assim que entrar na escola a esquerda."}
 ]
 
 # Inicializa histórico da conversa
