@@ -2,21 +2,10 @@ import streamlit as st
 
 st.set_page_config(page_title="FaeThink", page_icon="🤖", layout="wide")
 
-# Estilos gerais do layout
+# Estilos do chat e título
 st.markdown(
     """
     <style>
-    /* Fundo da página e layout em tons de branco */
-    body {
-        background-color: #f9f9f9 !important;
-    }
-    .block-container {
-        background-color: #ffffff !important;
-        padding: 2rem 2rem;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0,0,0,0.05);
-    }
-
     /* Balões do chat */
     .balao-usuario {
         background-color: #4A90E2; 
