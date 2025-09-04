@@ -48,7 +48,7 @@ st.markdown(
 
     /* Texto normal em preto e negrito */
     .texto-preto {
-        color: #000000;
+        color: #FFFFFF;
         font-weight: bold;
     }
     </style>
