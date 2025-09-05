@@ -98,58 +98,60 @@ if menu == "Chatbot":
         if st.button("💬 Abrir Chat"):
             st.session_state.abrir_chat = True
     else:
-        # Overlay do chat
-        st.markdown("<div class='overlay'><div class='chatbox'>", unsafe_allow_html=True)
-
-        # Área das mensagens
-        st.markdown("<div class='chat-mensagens'>", unsafe_allow_html=True)
-
+        # Renderiza o overlay inteiro de uma vez
+        html_overlay = """
+        <div class='overlay'>
+            <div class='chatbox'>
+                <div class='chat-mensagens'>
+        """
+        # Adiciona mensagens
         for usuario, mensagem in st.session_state.conversa:
             if usuario == "Você":
-                st.markdown(f"<div class='balao-usuario'>{mensagem}</div>", unsafe_allow_html=True)
+                html_overlay += f"<div class='balao-usuario'>{mensagem}</div>"
             else:
-                st.markdown(f"<div class='balao-bot'>{mensagem}</div>", unsafe_allow_html=True)
+                html_overlay += f"<div class='balao-bot'>{mensagem}</div>"
 
-        st.markdown("</div>", unsafe_allow_html=True)  # fecha mensagens
+        # Fecha div mensagens e abre input
+        html_overlay += """
+                </div>
+                <div class='chat-input'>
+        """
+        st.markdown(html_overlay, unsafe_allow_html=True)
 
         # Input fixo no rodapé
-        with st.container():
-            st.markdown("<div class='chat-input'>", unsafe_allow_html=True)
-            col1, col2 = st.columns([4,1])
-            with col1:
-                pergunta_usuario = st.text_input("Digite sua mensagem:", key="msg_input")
-            with col2:
-                enviar = st.button("Enviar")
+        col1, col2 = st.columns([4,1])
+        with col1:
+            pergunta_usuario = st.text_input("Digite sua mensagem:", key="msg_input")
+        with col2:
+            enviar = st.button("Enviar")
 
-            if enviar and pergunta_usuario:
-                pergunta_lower = pergunta_usuario.lower()
-                resposta_bot = "Desculpe, não entendi sua pergunta 😅"
+        if enviar and pergunta_usuario:
+            pergunta_lower = pergunta_usuario.lower()
+            resposta_bot = "Desculpe, não entendi sua pergunta 😅"
 
-                base_conhecimento = [
-                    {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola, na sala ***."},
-                    {"keywords": ["boletim", "notas"], "resposta": "O boletim pode ser pego na secretaria após cada trimestre."},
-                    {"keywords": ["horário", "aulas"], "resposta": "O horário completo das aulas está disponível no mural da escola."},
-                    {"keywords": ["secretaria", "contato"], "resposta": "Você pode falar com a secretaria pessoalmente, assim que entrar na escola à esquerda."}
-                ]
+            base_conhecimento = [
+                {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola, na sala ***."},
+                {"keywords": ["boletim", "notas"], "resposta": "O boletim pode ser pego na secretaria após cada trimestre."},
+                {"keywords": ["horário", "aulas"], "resposta": "O horário completo das aulas está disponível no mural da escola."},
+                {"keywords": ["secretaria", "contato"], "resposta": "Você pode falar com a secretaria pessoalmente, assim que entrar na escola à esquerda."}
+            ]
 
-                for item in base_conhecimento:
-                    if any(k in pergunta_lower for k in item["keywords"]):
-                        resposta_bot = item["resposta"]
-                        break
+            for item in base_conhecimento:
+                if any(k in pergunta_lower for k in item["keywords"]):
+                    resposta_bot = item["resposta"]
+                    break
 
-                st.session_state.conversa.append(("Você", pergunta_usuario))
-                st.session_state.conversa.append(("FaeThink", resposta_bot))
+            st.session_state.conversa.append(("Você", pergunta_usuario))
+            st.session_state.conversa.append(("FaeThink", resposta_bot))
 
-                st.session_state.msg_input = ""  # limpa input
+            st.session_state.msg_input = ""
 
-            st.markdown("</div>", unsafe_allow_html=True)
+        # Fecha chatbox e overlay
+        st.markdown("</div></div></div>", unsafe_allow_html=True)
 
-        # Botão fechar
         if st.button("❌ Fechar Chat"):
             st.session_state.abrir_chat = False
             st.session_state.conversa = []
-
-        st.markdown("</div></div>", unsafe_allow_html=True)  # fecha overlay/chatbox
 
 # -------- SOBRE O PROJETO --------
 elif menu == "Sobre o Projeto":
