@@ -57,11 +57,21 @@ st.markdown(
     .chatbox {
         background: #f9f9f9;
         width: 400px;
-        max-height: 80%;
+        height: 70%;
         border-radius: 15px;
-        padding: 15px;
+        display: flex;
+        flex-direction: column;
         box-shadow: 0px 5px 20px rgba(0,0,0,0.3);
+    }
+    .chat-mensagens {
+        flex: 1;
         overflow-y: auto;
+        padding: 10px;
+    }
+    .chat-input {
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        background: #fff;
     }
     </style>
     """,
@@ -81,32 +91,46 @@ if menu == "Chatbot":
 
     if "abrir_chat" not in st.session_state:
         st.session_state.abrir_chat = False
+    if "conversa" not in st.session_state:
+        st.session_state.conversa = []
 
-    if st.button("💬 Abrir Chat"):
-        st.session_state.abrir_chat = True
-
-    # Overlay do chat
-    if st.session_state.abrir_chat:
+    if not st.session_state.abrir_chat:
+        if st.button("💬 Abrir Chat"):
+            st.session_state.abrir_chat = True
+    else:
+        # Overlay do chat
         st.markdown("<div class='overlay'><div class='chatbox'>", unsafe_allow_html=True)
 
-        st.markdown("### 💬 Chat estilo WhatsApp")
+        # Área das mensagens
+        st.markdown("<div class='chat-mensagens'>", unsafe_allow_html=True)
 
-        base_conhecimento = [
-            {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola, na sala ***."},
-            {"keywords": ["boletim", "notas"], "resposta": "O boletim pode ser pego na secretaria após cada trimestre."},
-            {"keywords": ["horário", "aulas"], "resposta": "O horário completo das aulas está disponível no mural da escola."},
-            {"keywords": ["secretaria", "contato"], "resposta": "Você pode falar com a secretaria pessoalmente, assim que entrar na escola à esquerda."}
-        ]
+        for usuario, mensagem in st.session_state.conversa:
+            if usuario == "Você":
+                st.markdown(f"<div class='balao-usuario'>{mensagem}</div>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"<div class='balao-bot'>{mensagem}</div>", unsafe_allow_html=True)
 
-        if "conversa" not in st.session_state:
-            st.session_state.conversa = []
+        st.markdown("</div>", unsafe_allow_html=True)  # fecha mensagens
 
-        pergunta_usuario = st.text_input("Digite sua mensagem:")
+        # Input fixo no rodapé
+        with st.container():
+            st.markdown("<div class='chat-input'>", unsafe_allow_html=True)
+            col1, col2 = st.columns([4,1])
+            with col1:
+                pergunta_usuario = st.text_input("Digite sua mensagem:", key="msg_input")
+            with col2:
+                enviar = st.button("Enviar")
 
-        if st.button("Enviar"):
-            if pergunta_usuario:
+            if enviar and pergunta_usuario:
                 pergunta_lower = pergunta_usuario.lower()
                 resposta_bot = "Desculpe, não entendi sua pergunta 😅"
+
+                base_conhecimento = [
+                    {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola, na sala ***."},
+                    {"keywords": ["boletim", "notas"], "resposta": "O boletim pode ser pego na secretaria após cada trimestre."},
+                    {"keywords": ["horário", "aulas"], "resposta": "O horário completo das aulas está disponível no mural da escola."},
+                    {"keywords": ["secretaria", "contato"], "resposta": "Você pode falar com a secretaria pessoalmente, assim que entrar na escola à esquerda."}
+                ]
 
                 for item in base_conhecimento:
                     if any(k in pergunta_lower for k in item["keywords"]):
@@ -116,17 +140,16 @@ if menu == "Chatbot":
                 st.session_state.conversa.append(("Você", pergunta_usuario))
                 st.session_state.conversa.append(("FaeThink", resposta_bot))
 
-        # Histórico de mensagens
-        for usuario, mensagem in st.session_state.conversa:
-            if usuario == "Você":
-                st.markdown(f"<div class='balao-usuario'>{mensagem}</div>", unsafe_allow_html=True)
-            else:
-                st.markdown(f"<div class='balao-bot'>{mensagem}</div>", unsafe_allow_html=True)
+                st.session_state.msg_input = ""  # limpa input
 
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        # Botão fechar
         if st.button("❌ Fechar Chat"):
             st.session_state.abrir_chat = False
+            st.session_state.conversa = []
 
-        st.markdown("</div></div>", unsafe_allow_html=True)
+        st.markdown("</div></div>", unsafe_allow_html=True)  # fecha overlay/chatbox
 
 # -------- SOBRE O PROJETO --------
 elif menu == "Sobre o Projeto":
@@ -147,17 +170,14 @@ elif menu == "Projetos da Escola":
     st.markdown("## 📢 Projetos da Escola")
     st.write("Aqui estão alguns projetos em andamento na nossa escola:")
 
-    # Projeto 1
     col1, col2 = st.columns([1,5])
     with col1:
         st.image("https://i.imgur.com/N2DeKr9.png", width=200)
     with col2:
         st.markdown("### Jornal A Voz do Republica 🤖")
         st.markdown("[📸 Instagram](https://www.instagram.com/avoz_republica/)")
-
     st.divider()
 
-    # Projeto 2
     col1, col2 = st.columns([1,5])
     with col1:
         st.image("https://i.imgur.com/PAHqMhJ.png", width=200)
