@@ -62,16 +62,12 @@ st.markdown(
         display: flex;
         flex-direction: column;
         box-shadow: 0px 5px 20px rgba(0,0,0,0.3);
+        padding: 10px;
     }
     .chat-mensagens {
         flex: 1;
         overflow-y: auto;
-        padding: 10px;
-    }
-    .chat-input {
-        border-top: 1px solid #ccc;
-        padding: 10px;
-        background: #fff;
+        margin-bottom: 10px;
     }
     </style>
     """,
@@ -98,27 +94,20 @@ if menu == "Chatbot":
         if st.button("💬 Abrir Chat"):
             st.session_state.abrir_chat = True
     else:
-        # Renderiza o overlay inteiro de uma vez
-        html_overlay = """
-        <div class='overlay'>
-            <div class='chatbox'>
-                <div class='chat-mensagens'>
-        """
-        # Adiciona mensagens
+        # Renderiza o overlay inteiro
+        st.markdown("<div class='overlay'><div class='chatbox'>", unsafe_allow_html=True)
+
+        # Área das mensagens
+        mensagens_html = "<div class='chat-mensagens'>"
         for usuario, mensagem in st.session_state.conversa:
             if usuario == "Você":
-                html_overlay += f"<div class='balao-usuario'>{mensagem}</div>"
+                mensagens_html += f"<div class='balao-usuario'>{mensagem}</div>"
             else:
-                html_overlay += f"<div class='balao-bot'>{mensagem}</div>"
+                mensagens_html += f"<div class='balao-bot'>{mensagem}</div>"
+        mensagens_html += "</div>"
+        st.markdown(mensagens_html, unsafe_allow_html=True)
 
-        # Fecha div mensagens e abre input
-        html_overlay += """
-                </div>
-                <div class='chat-input'>
-        """
-        st.markdown(html_overlay, unsafe_allow_html=True)
-
-        # Input fixo no rodapé
+        # Input de mensagem
         col1, col2 = st.columns([4,1])
         with col1:
             pergunta_usuario = st.text_input("Digite sua mensagem:", key="msg_input")
@@ -146,12 +135,13 @@ if menu == "Chatbot":
 
             st.session_state.msg_input = ""
 
-        # Fecha chatbox e overlay
-        st.markdown("</div></div></div>", unsafe_allow_html=True)
-
+        # Botão fechar
         if st.button("❌ Fechar Chat"):
             st.session_state.abrir_chat = False
             st.session_state.conversa = []
+
+        # Fecha overlay
+        st.markdown("</div></div>", unsafe_allow_html=True)
 
 # -------- SOBRE O PROJETO --------
 elif menu == "Sobre o Projeto":
