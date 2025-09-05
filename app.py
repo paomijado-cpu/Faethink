@@ -66,7 +66,7 @@ if menu == "Chatbot":
         if st.button("💬 Abrir Chat"):
             st.session_state.abrir_chat = True
     else:
-        st.markdown("### 💬 Chat - estilo WhatsApp")
+        st.markdown("### 💬 Chat")
 
         base_conhecimento = [
             {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola, na sala ***."},
