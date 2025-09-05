@@ -67,19 +67,8 @@ if menu == "Chatbot":
     if "conversa" not in st.session_state:
         st.session_state.conversa = []
 
-    perguntas_rapidas = [
-        "Onde posso arrumar estágio?",
-        "Como acessar meu boletim?",
-        "Qual o horário das aulas?",
-        "Como falar com a secretaria?"
-    ]
-
-    cols = st.columns(len(perguntas_rapidas))
-    for i, pergunta in enumerate(perguntas_rapidas):
-        if cols[i].button(pergunta):
-            st.session_state.pergunta = pergunta
-
-    pergunta_usuario = st.text_input("Digite sua pergunta:", value=st.session_state.get("pergunta", ""))
+    # Campo de input (sem sugestões)
+    pergunta_usuario = st.text_input("Digite sua pergunta:")
 
     if st.button("Enviar"):
         if pergunta_usuario:
@@ -93,7 +82,6 @@ if menu == "Chatbot":
 
             st.session_state.conversa.append(("Você", pergunta_usuario))
             st.session_state.conversa.append(("FaeThink", resposta_bot))
-            st.session_state.pergunta = ""
 
     for usuario, mensagem in st.session_state.conversa:
         if usuario == "Você":
@@ -121,9 +109,8 @@ elif menu == "Projetos da Escola":
     st.write("Aqui estão alguns projetos em andamento na nossa escola:")
 
     projetos = {
-        "Projeto Robótica 🤖": "https://instagram.com/projeto_robotica",
-        "Teatro & Cultura 🎭": "https://instagram.com/projeto_teatro",
-        "Esportes & Saúde ⚽": "https://instagram.com/projeto_esportes"
+        "Jornal A Voz do Republica 🤖": "https://www.instagram.com/avoz_republica/",
+        "Projeto Multiplicadores 🎭": "https://www.instagram.com/alunomultiplicador/"
     }
 
     for nome, link in projetos.items():
