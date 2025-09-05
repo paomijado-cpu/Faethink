@@ -5,7 +5,6 @@ st.set_page_config(page_title="FaeThink", page_icon="🎓", layout="wide")
 # ----------------------------- CSS -----------------------------
 st.markdown("""
 <style>
-/* Título com gradiente */
 .titulo-gradient{
   text-align:center;
   background:linear-gradient(90deg,#4A90E2,#ADD8E6);
@@ -13,7 +12,6 @@ st.markdown("""
   -webkit-text-fill-color:transparent;
   font-size:48px;font-weight:700;padding:15px;border-radius:10px;
 }
-/* Área do chat (estilo WhatsApp Web) */
 .chat-wrapper{
   background:#111B21;border-radius:12px;padding:12px;height:70vh;
   display:flex;flex-direction:column;gap:10px;border:1px solid #202C33;
@@ -29,56 +27,50 @@ st.markdown("""
   background:#202C33;color:#EDEDED;padding:10px;border-radius:0 10px 10px 10px;
   margin:6px 0;display:inline-block;max-width:70%;float:left;clear:both;
 }
-.chat-input-row{ display:flex; gap:8px; }
 </style>
 """, unsafe_allow_html=True)
 
 # ----------------------------- Estado -----------------------------
-if "abrir_chat" not in st.session_state:
-    st.session_state.abrir_chat = False
+if "pagina" not in st.session_state:
+    st.session_state.pagina = "Início"
 if "conversa" not in st.session_state:
     st.session_state.conversa = []
 
-# ----------------------------- Sidebar dinâmico -----------------------------
-menu_items = ["Início", "Sobre o Projeto", "Projetos da Escola"]
-if st.session_state.abrir_chat:
-    # Chatbot só aparece DEPOIS de apertar "Abrir Chat"
-    menu_items.insert(1, "Chatbot")
-
-menu = st.sidebar.radio("📌 Navegação", menu_items)
+# ----------------------------- Sidebar -----------------------------
+menu = st.sidebar.radio("📌 Navegação", 
+    ["Início", "Sobre o Projeto", "Projetos da Escola"] + 
+    (["Chatbot"] if st.session_state.pagina == "Chatbot" else []), 
+    index=["Início", "Sobre o Projeto", "Projetos da Escola", "Chatbot"].index(st.session_state.pagina)
+)
 
 # ----------------------------- Título -----------------------------
 st.markdown("<h1 class='titulo-gradient'>FaeThink 🎓</h1>", unsafe_allow_html=True)
 
 # ----------------------------- Páginas -----------------------------
-# INÍCIO (tem o botão que libera o Chatbot)
 if menu == "Início":
+    st.session_state.pagina = "Início"
     st.markdown("## 👋 Bem-vindo ao FaeThink!")
     st.write("Seu assistente especializado em FAETEC. Manda ver 😁!")
 
-    if not st.session_state.abrir_chat:
-        if st.button("💬 Abrir Chat"):
-            st.session_state.abrir_chat = True
-            st.experimental_rerun()  # atualiza o menu para mostrar "Chatbot"
-    else:
-        st.success("✅ Chat liberado! Acesse no menu lateral: **Chatbot**.")
+    if st.button("💬 Abrir Chat"):
+        st.session_state.pagina = "Chatbot"
+        st.experimental_rerun()
 
-# CHATBOT (só aparece se abriu no Início)
 elif menu == "Chatbot":
+    st.session_state.pagina = "Chatbot"
     st.markdown("## 💬 Chatbot")
 
     # Caixa do chat
-    st.markdown("<div class='chat-wrapper'>", unsafe_allow_html=True)
+    st.markdown("<div class='chat-wrapper'><div class='chat-scroll'>", unsafe_allow_html=True)
 
-    # Histórico
-    html = "<div class='chat-scroll'>"
+    # Histórico dentro da caixa
     for usuario, mensagem in st.session_state.conversa:
         classe = "balao-usuario" if usuario == "Você" else "balao-bot"
-        html += f"<div class='{classe}'>{mensagem}</div>"
-    html += "</div>"
-    st.markdown(html, unsafe_allow_html=True)
+        st.markdown(f"<div class='{classe}'>{mensagem}</div>", unsafe_allow_html=True)
 
-    # Form de envio (Enter envia)
+    st.markdown("</div>", unsafe_allow_html=True)  # fecha chat-scroll
+
+    # Input do chat
     with st.form("chat_form", clear_on_submit=True):
         col1, col2 = st.columns([8,1])
         with col1:
@@ -107,14 +99,13 @@ elif menu == "Chatbot":
 
     st.markdown("</div>", unsafe_allow_html=True)  # fecha chat-wrapper
 
-    # Fechar chat (some a categoria do menu)
-    if st.button("❌ Fechar Chat"):
-        st.session_state.abrir_chat = False
-        st.session_state.conversa = []
+    # Botão voltar
+    if st.button("⬅️ Voltar"):
+        st.session_state.pagina = "Início"
         st.experimental_rerun()
 
-# SOBRE O PROJETO
 elif menu == "Sobre o Projeto":
+    st.session_state.pagina = "Sobre o Projeto"
     st.markdown("## ℹ️ Sobre o FaeThink")
     st.write("""
     O **FaeThink 🎓** é um projeto criado para ajudar alunos da Faetec 
@@ -127,8 +118,8 @@ elif menu == "Sobre o Projeto":
     Nosso objetivo é facilitar a vida dos estudantes com tecnologia acessível 🚀.
     """)
 
-# PROJETOS DA ESCOLA
 elif menu == "Projetos da Escola":
+    st.session_state.pagina = "Projetos da Escola"
     st.markdown("## 📢 Projetos da Escola")
     st.write("Aqui estão alguns projetos em andamento na nossa escola:")
 
