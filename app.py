@@ -108,10 +108,20 @@ elif menu == "Projetos da Escola":
     st.markdown("## 📢 Projetos da Escola")
     st.write("Aqui estão alguns projetos em andamento na nossa escola:")
 
-    projetos = {
-        "Jornal A Voz do Republica 🤖": "https://www.instagram.com/avoz_republica/",
-        "Projeto Multiplicadores 🎭": "https://www.instagram.com/alunomultiplicador/"
-    }
+    # Projeto 1
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        st.image("https://upload.wikimedia.org/wikipedia/commons/9/99/Instagram_logo_2016.svg", width=100)  # substitua pelo link da imagem do jornal
+    with col2:
+        st.markdown("### Jornal A Voz do Republica 🤖")
+        st.markdown("[📸 Instagram](https://www.instagram.com/avoz_republica/)")
 
-    for nome, link in projetos.items():
-        st.markdown(f"🔹 **[{nome}]({link})**")
+    st.divider()
+
+    # Projeto 2
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        st.image("https://upload.wikimedia.org/wikipedia/commons/9/99/Instagram_logo_2016.svg", width=100)  # substitua pelo link da imagem do projeto
+    with col2:
+        st.markdown("### Projeto Multiplicadores 🎭")
+        st.markdown("[📸 Instagram](https://www.instagram.com/alunomultiplicador/)")
