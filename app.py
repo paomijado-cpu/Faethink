@@ -111,7 +111,7 @@ elif menu == "Projetos da Escola":
     # Projeto 1
     col1, col2 = st.columns([1, 3])
     with col1:
-        st.image("https://imgur.com/a/3Lq8Tlm.png", width=100)  # substitua pelo link da imagem do jornal
+        st.image("https://i.imgur.com/N2DeKr9.png", width=100)  # substitua pelo link da imagem do jornal
     with col2:
         st.markdown("### Jornal A Voz do Republica 🤖")
         st.markdown("[📸 Instagram](https://www.instagram.com/avoz_republica/)")
@@ -121,7 +121,7 @@ elif menu == "Projetos da Escola":
     # Projeto 2
     col1, col2 = st.columns([1, 3])
     with col1:
-        st.image("https://imgur.com/a/fGZY76b.png", width=100)  # substitua pelo link da imagem do projeto
+        st.image("https://i.imgur.com/PAHqMhJ.png", width=100)  # substitua pelo link da imagem do projeto
     with col2:
         st.markdown("### Projeto Multiplicadores 🎭")
         st.markdown("[📸 Instagram](https://www.instagram.com/alunomultiplicador/)")
