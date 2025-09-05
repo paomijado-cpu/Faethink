@@ -42,6 +42,27 @@ st.markdown(
         padding: 15px;
         border-radius: 10px;
     }
+    /* Overlay */
+    .overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.4);
+        backdrop-filter: blur(6px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+    }
+    .chatbox {
+        background: #f9f9f9;
+        width: 400px;
+        max-height: 80%;
+        border-radius: 15px;
+        padding: 15px;
+        box-shadow: 0px 5px 20px rgba(0,0,0,0.3);
+        overflow-y: auto;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -58,15 +79,17 @@ if menu == "Chatbot":
     st.markdown("## 👋 Bem-vindo ao FaeThink!")
     st.write("Seu assistente especializado em FAETEC. Manda ver 😁!")
 
-    # Botão para abrir o chat estilo WhatsApp
     if "abrir_chat" not in st.session_state:
         st.session_state.abrir_chat = False
 
-    if not st.session_state.abrir_chat:
-        if st.button("💬 Abrir Chat"):
-            st.session_state.abrir_chat = True
-    else:
-        st.markdown("### 💬 Chat")
+    if st.button("💬 Abrir Chat"):
+        st.session_state.abrir_chat = True
+
+    # Overlay do chat
+    if st.session_state.abrir_chat:
+        st.markdown("<div class='overlay'><div class='chatbox'>", unsafe_allow_html=True)
+
+        st.markdown("### 💬 Chat estilo WhatsApp")
 
         base_conhecimento = [
             {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola, na sala ***."},
@@ -93,16 +116,17 @@ if menu == "Chatbot":
                 st.session_state.conversa.append(("Você", pergunta_usuario))
                 st.session_state.conversa.append(("FaeThink", resposta_bot))
 
-        # Exibe o histórico no estilo WhatsApp
+        # Histórico de mensagens
         for usuario, mensagem in st.session_state.conversa:
             if usuario == "Você":
                 st.markdown(f"<div class='balao-usuario'>{mensagem}</div>", unsafe_allow_html=True)
             else:
                 st.markdown(f"<div class='balao-bot'>{mensagem}</div>", unsafe_allow_html=True)
 
-        if st.button("⬅️ Voltar"):
+        if st.button("❌ Fechar Chat"):
             st.session_state.abrir_chat = False
-            st.session_state.conversa = []
+
+        st.markdown("</div></div>", unsafe_allow_html=True)
 
 # -------- SOBRE O PROJETO --------
 elif menu == "Sobre o Projeto":
