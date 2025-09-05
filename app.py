@@ -55,7 +55,7 @@ menu = st.sidebar.radio("📌 Navegação", ["Chatbot", "Sobre o Projeto", "Proj
 
 # -------- CHATBOT --------
 if menu == "Chatbot":
-    st.markdown("### 🤖 Faça perguntas sobre escola, estágios, boletim, horários etc. Sou especializado em Faetec. Manda ver 😁!")
+    st.markdown("### 🤖 Faça suas dúvidas sobre a escola. Sou especializado em Faetec. Manda ver 😁!")
 
     base_conhecimento = [
         {"keywords": ["estágio", "trabalho"], "resposta": "Você pode procurar estágio no setor de carreiras da escola, na sala ***."},
